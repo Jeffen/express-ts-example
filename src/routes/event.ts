@@ -1,22 +1,13 @@
-import { Router, Request, Response, NextFunction } from 'express';
-import { asyncUtil } from '../utils';
+import { Request, Response, NextFunction } from 'express';
+import { Controller, Get } from '../lib/overnightjs';
 
+@Controller('api/event')
 export class EventRouter {
-  router: Router = Router();
-  constructor() {
-    this.initializeRoutes();
-  }
-
-  private initializeRoutes() {
-    this.router.get(`/getId`, asyncUtil(this.getEventById));
-  }
-
-  private async getEventById(req: Request, res: Response, next: NextFunction) {
+  @Get('getId')
+  async getEventById(req: Request, res: Response, next: NextFunction) {
     return res.json({
       status: 'OK',
       result: 'OK'
     });
   }
 }
-
-export default EventRouter;

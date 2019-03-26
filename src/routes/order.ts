@@ -1,23 +1,13 @@
-import { Router, Request, Response, NextFunction } from 'express';
-import { asyncUtil } from '../utils';
+import { Request, Response } from 'express';
+import { Get, Controller } from '../lib/overnightjs';
 
+@Controller('api/order')
 export class OrderRouter {
-  router: Router = Router();
-
-  constructor() {
-    this.initializeRoutes();
-  }
-
-  private initializeRoutes() {
-    this.router.get(`/getId`, asyncUtil(this.getOrderById));
-  }
-
-  private async getOrderById(req: Request, res: Response, next: NextFunction) {
-    return res.json({
+  @Get('getId')
+  private getOrderById(req: Request, res: Response) {
+    return res.status(200).json({
       status: 'OK',
       result: null
     });
   }
 }
-
-export default OrderRouter;
