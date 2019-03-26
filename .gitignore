@@ -1,7 +1,8 @@
 public/static/*
 node_modules
-log/*
+log
 .DS_Store
 .vscode
 .env
 dist
+yarn-error.log

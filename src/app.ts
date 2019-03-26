@@ -1,12 +1,13 @@
-import express from 'express';
 import bodyParser from 'body-parser';
 import cors from 'cors';
-import path from 'path';
 import compression from 'compression';
 import passport from 'passport';
 import helmet from 'helmet';
 import dotenv from 'dotenv';
-import errorhandler from 'errorhandler';
+import bluebird from 'bluebird';
+import { Application } from 'express';
+import * as AWS from 'aws-sdk';
+
 import { Server } from './lib/overnightjs';
 import { exceptionErrHandler, clientErrHandler } from './config';
 
@@ -20,6 +21,10 @@ class RootServer extends Server {
     this.setupErrorHandler();
   }
 
+  get App(): Application {
+    return this.app;
+  }
+
   private setupExpress() {
     // initialize configuration
     dotenv.config({ path: '.env' });
@@ -27,6 +32,12 @@ class RootServer extends Server {
     this.app.set('env', process.env.NODE_ENV || 'development');
 
     // Initiate DB
+    AWS.config.update({
+      accessKeyId: process.env.AWS_ACCESS_KEY_ID,
+      secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
+      region: process.env.REGION
+    });
+    AWS.config.setPromisesDependency(bluebird);
     /* Connect to MongoDB
     const mongoUrl = MONGODB_URI;
     (<any>mongoose).Promise = bluebird;
@@ -58,9 +69,7 @@ class RootServer extends Server {
     // require('./config/passport')(passport, true);
 
     // Static files serving
-    this.app.use(
-      express.static(path.join(__dirname, 'public'), { maxAge: 31557600000 })
-    );
+    // this.app.use(express.static(path.join(__dirname, 'public')));
   }
 
   private setupRouter() {
@@ -77,12 +86,12 @@ class RootServer extends Server {
 
   private setupErrorHandler() {
     // Logger Service and Error Handling
-    if (process.env.NODE_ENV === 'development') {
-      this.app.use(errorhandler());
-    } else {
-      this.app.use(clientErrHandler);
-      this.app.use(exceptionErrHandler);
-    }
+    // if (process.env.NODE_ENV === 'development') {
+    // this.app.use(errorhandler());
+    // } else {
+    this.app.use(clientErrHandler);
+    this.app.use(exceptionErrHandler);
+    // }
   }
 
   start() {
