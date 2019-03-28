@@ -3,6 +3,14 @@ node_modules
 log
 .DS_Store
 .vscode
+dist
+yarn-error.log
+package-lock.json
+coverage
+
+# Environmental config and API credentials
 .env
+.ebextensions/options.config
+
 dist
 yarn-error.log

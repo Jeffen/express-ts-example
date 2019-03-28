@@ -5,8 +5,8 @@ import { Get, Controller } from '../lib/overnightjs';
 export class RootRouter {
   @Get('/')
   private test(req: Request, res: Response) {
-    return res.send({
-      Output: 'Hello World!'
+    return res.status(200).send({
+      Output: 'Hello Mars!'
     });
   }
 }

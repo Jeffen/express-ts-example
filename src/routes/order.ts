@@ -7,7 +7,7 @@ export class OrderRouter {
   private getOrderById(req: Request, res: Response) {
     return res.status(200).json({
       status: 'OK',
-      result: null
+      result: process.env.NODE_ENV.toUpperCase()
     });
   }
 }
